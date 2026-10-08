@@ -1,0 +1,43 @@
+ const lesson=document.getElementById('lesson').value.trim()||'الدرس';
+ let m=parseInt(document.getElementById('minutes').value)||45;
+ const level=document.getElementById('level').value;
+ let intro=Math.max(3,Math.round(m*.12)), explain=Math.max(8,Math.round(m*.35));
+ let activity=Math.max(7,Math.round(m*.30)), assess=Math.max(5,m-intro-explain-activity);
+ document.getElementById('plan').style.display='block';
+ document.getElementById('plan').innerHTML=
+ <strong>خطة حصة ${subject} — ${lesson}</strong><br>
+ <span class="pill">المستوى: ${level}</span><span class="pill">المدة: ${m} دقيقة</span>
+ <hr>
+ 🟣 <b>1. التهيئة (${intro} دقائق):</b> سؤال قصير عن موضوع الدرس وربطه بالمعرفة السابقة.<br>
+ 🟣 <b>2. شرح الدرس (${explain} دقائق):</b> عرض أهم المفاهيم مع أمثلة وأسئلة سريعة.<br>
+ 🟣 <b>3. نشاط تطبيقي (${activity} دقائق):</b> نشاط فردي أو جماعي للتأكد من فهم الطالبات.<br>
+ 🟣 <b>4. تقويم ختامي (${assess} دقائق):</b> 3 أسئلة سريعة أو بطاقة خروج لمعرفة مستوى الفهم.<br><br>
+ <b>💡 اقتراح ذكي:</b> إذا لاحظتِ أن أغلب الطالبات لم يفهمن نقطة معينة، أعيدي شرحها بمثال أبسط قبل الانتقال للدرس التالي.;
+}
+function updateTimer(){
+ let m=String(Math.floor(timerSeconds/60)).padStart(2,'0');
+ let s=String(timerSeconds%60).padStart(2,'0');
+ document.getElementById('timer').textContent=m+':'+s;
+}
+function startTimer(){
+ if(timerInterval)return;
+ timerInterval=setInterval(()=>{timerSeconds++;updateTimer()},1000);
+}
+function pauseTimer(){clearInterval(timerInterval);timerInterval=null}
+function resetTimer(){pauseTimer();timerSeconds=0;updateTimer()}
+function addTask(){
+ const input=document.getElementById('taskInput'); const value=input.value.trim();
+ if(!value)return;
+ const row=document.createElement('div'); row.className='task';
+ row.innerHTML=<input type="checkbox" onchange="this.nextElementSibling.classList.toggle('done')"><span>${escapeHtml(value)}</span><button class="danger" onclick="this.parentElement.remove()">حذف</button>;
+ document.getElementById('tasks').appendChild(row); input.value='';
+}
+function pickStudent(){
+ const names=document.getElementById('names').value.split('\n').map(x=>x.trim()).filter(Boolean);
+ const box=document.getElementById('chosen'); box.style.display='block';
+ box.textContent=names.length ? '🌟 '+names[Math.floor(Math.random()*names.length)] : 'أضيفي أسماء الطالبات أولًا';
+}
+function escapeHtml(t){return t.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+</script>
+</body>
+</html>
